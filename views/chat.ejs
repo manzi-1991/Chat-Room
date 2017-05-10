@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		.typeWriter{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			height: 100px;
+			background-color: #ccc;
+			width: 100%;
+		}
+		.typeWriter input{
+			font-size: 30px;
+		}
+		.typeWriter input[type=text]{
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<h1>小小聊天室 欢迎：<span id="username"><%=username%></span></h1>
+	<div>
+		<ul class="chatArea">
+			
+		</ul>
+	</div>
+
+	<div class="typeWriter">
+		<input type="text" id="content" />
+		<button id="delivery">发送</button>
+	</div>
+	<!--引用socket和jquery-->
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/jquery-1.11.3.min.js"></script>
+	<!--书写相关socket事件和内容-->
+	<script type="text/javascript">
+		//得到socket
+		const socket = io();
+		//输出内容给服务器
+		
+		$('#content').keydown(e=>{
+			if(e.keyCode == 13){
+				emit();
+			}
+		});
+		$('#delivery').click(()=>{
+			emit();
+		})
+		//监听服务器返回的内容
+		socket.on('chat',msg=>{
+			$(".chatArea").prepend("<li><b>" + msg.username + "：</b>"+ msg.content + "</li>");
+		})
+		//封装emit函数
+		//注意：箭头函数的this取决于它的动态上下文环境，这里应该是window
+		function emit () {
+			//这里需要发送 用户名 和 内容
+			let username = $('#username').html();
+			let content = $('#content').val();
+			//如果没有发送的是空内容，则teturn
+			
+			socket.emit('chat',{
+				'username':username,
+				'content':content
+			});
+			console.log(this);
+			$('#content').val('');
+		}
+		
+		
+		
+	</script>
+</body>
+</html>
