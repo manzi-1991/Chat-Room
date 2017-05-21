@@ -77,6 +77,10 @@ io.on('connection',socket=>{
 	console.log('有一个人连接上来了！')
 	socket.on('chat',msg=>{
 		//io.emit是广播功能，如果是socket，则是单对单
+		//这里可以对msg进行自定义属性，比如时间，用户名，消息类型
+		//message.type = 'message';
+  		//message.created = Date.now();
+  		//message.username = socket.request.user.username;
 		io.emit('chat',msg);
 	})
 })
