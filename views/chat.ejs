@@ -50,6 +50,7 @@
 			emit();
 		})
 		//监听服务器返回的内容
+		//联想var source=new EventSource("demo_sse.php");  服务器发送事件
 		socket.on('chat',msg=>{
 			$(".chatArea").prepend("<li><b>" + msg.username + "：</b>"+ msg.content + "</li>");
 		})
